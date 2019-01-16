@@ -1,20 +1,29 @@
-Create a Magento admin page:
-Reference: https://devdocs.magento.com/guides/v2.2/ext-best-practices/extension-coding/example-module-adminpage.html 
+Create and use of Block:
+Here we will look, how we ceate Block and use/call it's functions in view(i.e. .phtml files) and in Controller. 
+1. Go to VendorDashboard module.
+2. There are 4 blocks:
+   a. Block/Adminhtml/Sales/Sales.php
+   b. Block/Adminhtml/Order/Order.php
+   c. Block/Adminhtml/Product/Product.php
+   d. Block/Adminhtml/Customer/Customer.php
+3. These all blocks are particularly designed for backend/admin only that's why all are inside Adminhtml directory.
+4. These blocks are used in corresponding templates:
+   a. view/adminhtml/templates/sales/sales.phtml
+   b. view/adminhtml/templates/order/
+      A. recent_orders.phtml 
+      B. order_history.phtml
+   c. view/adminhtml/templates/product/top_selling_products.phtml
+   d. view/adminhtml/templates/customer/top_customers.phtml
+   These all templates are called in view/adminhtml/templates/dashboard.phtml
+   These blocks/templates mappings are clearly mentioned in 
+      view/adminhtml/layout/vendordashboard_dashboard_index.xml
+      A layout file naming convention is nicely explained under branch 'create_a_magento_admin_page' in readme.txt under point 14.
+      In other words, for each page in magento there is one layout file as above.
+      Any template file can call their mapped block functions as mentioned in layout file using $block object (or might be using $this object).
+   Remember, here is one main block and 4 sub-blocks like Sales.php, Order.php, Product.php, Customer.php 
+5. An action of a Controller like:
+      Controller/Adminhtml/CustomAjax/Index.php
+      (Look here functions - getOrderChartData, getProductChartData, getCustomerChartData)
+   could call any block's functions whether it mentioned or not-mentioned in layout file created for this action/page.
+   
  
-Files/Folders created:
-1.  MyCompany - "Company Name"
-2.  MyCompany/ExampleAdminNewPage - "Module Name"
-3.  registration.php - Declared, going to develop "MODULE" i.e. not "THEME"
-4.  etc/module.xml - Declared, module name (which is actually "Comany Name"_"Actual Module Name") with it's version going to be released.
-5.  etc/adminhtml/routes.xml - defined frontName; all pages of this module, start with this frontName then Controller & in last action name.
-6.  etc/adminhtml/menu.xml - Prepare/make-ready/add all pages links of this module in menu i.e. decide here, where the pages links would be appear in admin-menu.
-7.  Controller - "Controllers of this module would be listed here".
-8.  Controller/Adminhtml - "Controllers whose are proposed to be developed for admin/backend only, would be listed here".
-9.  Controller/Adminhtml/HelloWorld - "Actually, directory HelloWorld is a Controller. In Magento, in real, Controllers are folder-name like here, not any php-file".
-10. Index.php - "It's an action of Controller HelloWorld. In Magento, inside Controller which is actually just any folder/folder-name, all php files are actions of that Controller".
-11. view - "Templates & layouts of this module's pages would exist here".
-12. view/adminhtml - "Only admin/backend pages layouts & templates would be listed here".
-13. view/adminhtml/layout - "Layout xml files would be listed here".
-14. exampleadminnewpage_helloworld_index - "A layout file". Remember, naming convention is as "Module frontName defined in routes.xml"_"Controller Name"_"Action Name". This means, for one Controller(with exactlly one action), there defines exactlly one layout. It contains blocks(from Block folder) mapped with templates(from view/adminhtml/templates folder). 
-15. view/adminhtml/templates - "Templates i.e. .phtml files would be listed here".
-16. helloworld.phtml - "A template file". "One or many template files collectively builds a page".
