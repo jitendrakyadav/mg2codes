@@ -17,22 +17,23 @@ What is RabbitMQ and what role it plays in Magento 2.3.1:
     1. It’s a AMQP supporting tool/server.
     2. It’s written in Erlang programming language.
     3. It uses many jargon like exchange, producer, queue, receiver, etc.
-    4.	Magento has code-support for any 3rd party AMQP tool like RabbitMQ.
+    4. Magento has code-support for any 3rd party AMQP tool like RabbitMQ.
 
 What Advantages of using Bulk API with RabbitMQ:
-    1. When a bulk API calling occurs, bulk-handler activated and it redirect the request to RabbitMQ.
-    2. RabbitMQ breaks this in many separate unique requests and store all requests in their queue.
+    1. When a bulk API calling occurs, bulk-handler activated.
+    2. Bulk-handler breaks this in many separate unique requests and send them to RabbitMQ to store all requests in their queue.
     3. Actually, Magento works hear as message producer.
-    4. It holds all request inside queue until Magento ready to receive it.
-    5. Queue request could be receives through some fixed Magento commands or any CRON having these commands.
+    4. It holds all requests inside queue until Magento ready to receive it.
+    5. Queue request could be received through some fixed Magento commands or any CRON having these commands.
 
 How this new Magento feature changes our code-flow/architecture:
-    1. I have check for bulk-customer creation and it was successful.
+    1. I have checked for bulk-customer creation and it was successful.
        Attached: bulk_api_request.png, bulk_api_response.png, rabbitmq_screen.png, rabbitmq_screen_after_consumer_run.png, consumers_listing.png, run_consumer.png
-    2. I have check for bulk-product creation and it was successful.
-       Attached: product/ asynchronous_product_call_request.png, product/ asynchronous_product_call_response.png, product/ rabbitMQ_print_screen.png
+    2. I have checked for bulk-product creation and it was successful.
+       Attached: product/asynchronous_product_call_request.png, product/asynchronous_product_call_response.png, product/rabbitMQ_print_screen.png
     3. There is no need to develop middle-layer for product & customer creation.
     4. For order creation support as well, I hope there don’t need to develop middle-layer. I have not looked much more for it, but to support the same, we would need to develop a new Magento Module for it.
+       Reference: https://webkul.com/blog/here-we-will-learn-how-to-configure-and-use-rabbitmq-in-magento-2-3/
     5. Reason behind it is, order creation does not occure just using a sinle API, it requires calling many APIs, like:
 	a. First setting store
 	b. Create admin token
@@ -42,6 +43,7 @@ How this new Magento feature changes our code-flow/architecture:
 	f. Call API to get shipping cost
 	g. Get address as well
 	h. Then create order API with payment
+       Reference: https://devdocs.magento.com/guides/v2.3/rest/tutorials/orders/order-config-store.html
 
 Step by Step Implementation:
     1. Install RabbitMQ server:
@@ -126,12 +128,34 @@ Step by Step Implementation:
     17.	Check Magento DB and Admin customer-grid, new customers are showing there.
 
 Supporting URLs & Study matterials:
-    1. https://devdocs.magento.com/guides/v2.3/rest/asynchronous-web-endpoints.html
-    2. https://devdocs.magento.com/guides/v2.3/rest/bulk-endpoints.html
-    3. https://devdocs.magento.com/guides/v2.3/install-gde/prereq/install-rabbitmq.html
-    4. https://devdocs.magento.com/guides/v2.3/rest/list.html
-    5. https://webkul.com/blog/here-we-will-learn-how-to-configure-and-use-rabbitmq-in-magento-2-3/
-    6. https://youtu.be/m9GdUOtxhhA
+    1. Asynchronous web endpoints.
+       https://devdocs.magento.com/guides/v2.3/rest/asynchronous-web-endpoints.html
+    2. Bulk endpoints.
+       https://devdocs.magento.com/guides/v2.3/rest/bulk-endpoints.html
+    3. RabbitMQ - overview, installation, & how use it in Magento.
+       https://devdocs.magento.com/guides/v2.3/install-gde/prereq/install-rabbitmq.html
+    4. Use RabbitMQ in Magento 2.3 by creating a custom module having Producer & Consumer.
+       https://webkul.com/blog/here-we-will-learn-how-to-configure-and-use-rabbitmq-in-magento-2-3/
+    5. How RabbitMQ download, install and use.
+       https://youtu.be/m9GdUOtxhhA
+
+Others:
+    1. Custom API for Magento 2: How we could develop a basis custome web-api in Magento 2.
+       https://inchoo.net/magento-2/magento-2-custom-api/
+    2. Alan Storm: Understanding the Web API Architecture in Magento 2.
+       https://alanstorm.com/magento-2-understanding-the-web-api-architecture/
+    3. Magento 2 API usage with examples.
+       https://inchoo.net/magento-2/magento-2-api/
+    4. List of REST endpoints by module.
+       https://devdocs.magento.com/guides/v2.3/rest/list.html
+    5. Order processing tutorial - step by step.
+       https://devdocs.magento.com/guides/v2.3/rest/tutorials/orders/order-config-store.html
+    6. API to create simple/configurable product, define configurable product options, create personalization option.
+       https://devdocs.magento.com/guides/v2.3/rest/tutorials/configurable-product/create-simple-products.html
+    7. Alan Storm: Understanding Access Control List Rules in Magento 2.
+       https://alanstorm.com/magento_2_understanding_access_control_list_rules/
+    8. Magento 2 Admin ACL Access Control Lists.
+       https://www.mageplaza.com/magento-2-module-development/magento-2-acl-access-control-lists.html
 
 Supporting new added Magento Modules:
     1. framework-amqp
@@ -140,9 +164,9 @@ Supporting new added Magento Modules:
     4. module-message-queue
 
 Supporting new added Magento tables:
-1. magento_bulk
-2. magento_acknowledged_bulk
-3. queue
-4. queue_lock
-5. queue_message
-6. queue_message_status
+    1. magento_bulk
+    2. magento_acknowledged_bulk
+    3. queue
+    4. queue_lock
+    5. queue_message
+    6. queue_message_status
